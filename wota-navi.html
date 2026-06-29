@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TECH_LIBRARY // WOTA芸 新手入门导航</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+/* ===============================
+   ROOT VARIABLES
+   =============================== */
+:root {
+  --bg-deep: #070509;
+  --july-flame: #E60036;
+  --flame-bright: #E35A3A;
+  --flame-glow: #ff6a3d;
+  --text-main: #F2E9EB;
+  --text-muted: #9A7A80;
+  --text-dim: #5A4A50;
+  --border-subtle: rgba(255,255,255,0.06);
+  --font-display: 'Orbitron', sans-serif;
+  --font-body: 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+  --font-mono: 'Courier New', monospace;
+  --glow-red: 0 0 8px rgba(255,106,61,0.45), 0 0 18px rgba(255,106,61,0.65), 0 0 36px rgba(227,90,58,0.55);
+  --side-padding: clamp(20px, 6vw, 60px);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg-deep);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===============================
+   PARTICLE FIELD
+   =============================== */
+.ParticleField { position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.7; }
+#field-canvas { width: 100%; height: 100%; display: block; }
+
+/* ===============================
+   FIXED HEADER
+   =============================== */
+.site-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  height: 68px;
+  background: rgba(7,5,9,0.85);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid rgba(230,0,54,0.15);
+  display: flex; align-items: center;
+}
+.nav-inner {
+  width: 100%; max-width: 1300px; margin: 0 auto;
+  padding: 0 var(--side-padding);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.logo {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none; color: var(--text-main);
+}
+.logo::before {
+  content: "";
+  width: 22px; height: 22px;
+  background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg transform='rotate(45 12 12)'%3E%3Crect x='5' y='5' width='3' height='3' fill='%23E60036'/%3E%3Crect x='10.5' y='5' width='3' height='3' fill='%23E60036'/%3E%3Crect x='16' y='5' width='3' height='3' fill='%23E60036'/%3E%3Crect x='5' y='10.5' width='3' height='3' fill='%23E60036'/%3E%3Crect x='10.5' y='10.5' width='3' height='3' fill='%23E60036'/%3E%3Crect x='16' y='10.5' width='3' height='3' fill='%23E60036'/%3E%3Crect x='5' y='16' width='3' height='3' fill='%23E60036'/%3E%3Crect x='10.5' y='16' width='3' height='3' fill='%23E60036'/%3E%3Crect x='16' y='16' width='3' height='3' fill='%23E60036'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: contain; background-repeat: no-repeat;
+  filter: drop-shadow(0 0 5px rgba(230,0,54,0.5));
+}
+.logo-text {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 0.85rem; letter-spacing: 2px;
+  color: var(--text-main);
+}
+.logo-text span { color: var(--july-flame); }
+.main-nav { display: flex; gap: 32px; }
+.main-nav a {
+  font-family: var(--font-display); font-size: 0.7rem;
+  letter-spacing: 2px; color: var(--text-muted);
+  text-decoration: none; text-transform: uppercase;
+  transition: all 0.3s ease; position: relative;
+}
+.main-nav a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0;
+  width: 100%; height: 1px; background: var(--july-flame);
+  transform: scaleX(0); transform-origin: right;
+  transition: transform 0.3s ease;
+}
+.main-nav a:hover { color: #fff; }
+.main-nav a:hover::after { transform: scaleX(1); transform-origin: left; }
+@media (max-width: 768px) { .main-nav { display: none; } }
+
+/* ===============================
+   HERO SECTION
+   =============================== */
+.hero {
+  position: relative; width: 100%; min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  overflow: hidden; background: #000;
+  padding-top: 68px;
+}
+.hero-bg {
+  position: absolute; top: 50%; left: 50%;
+  width: 130%; height: 130%;
+  transform: translate(-50%, -50%);
+  z-index: 2; pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 50% at 30% 40%, rgba(230,0,54,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 70% 60%, rgba(255,106,61,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 50% 50%, rgba(200,180,180,0.03) 0%, transparent 70%);
+  animation: nebulaDrift 20s ease-in-out infinite alternate;
+}
+@keyframes nebulaDrift {
+  0% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+  100% { transform: translate(-48%, -52%) scale(1.08) rotate(2deg); }
+}
+.hero-hud {
+  position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(230,0,54,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(230,0,54,0.03) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse 70% 60% at center, black 30%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at center, black 30%, transparent 70%);
+}
+.hero-scanline {
+  position: absolute; inset: 0; z-index: 4; pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px
+  );
+}
+.hero-diamond {
+  position: absolute; z-index: 5; pointer-events: none;
+  width: 120px; height: 120px;
+  top: 30%; left: 50%; transform: translate(-50%, -50%) rotate(45deg);
+  border: 1px solid rgba(230,0,54,0.15);
+  animation: diamondPulse 4s ease-in-out infinite;
+}
+.hero-diamond::after {
+  content: ''; position: absolute; inset: 20px;
+  border: 1px solid rgba(230,0,54,0.08);
+}
+@keyframes diamondPulse {
+  0%, 100% { opacity: 0.4; transform: translate(-50%, -50%) rotate(45deg) scale(1); }
+  50% { opacity: 0.8; transform: translate(-50%, -50%) rotate(45deg) scale(1.05); }
+}
+
+.hero-main-display {
+  position: absolute; top: 46%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10; text-align: center;
+  pointer-events: none; width: 90%;
+}
+.hero-tag {
+  font-family: var(--font-mono); font-size: 0.7rem;
+  letter-spacing: 6px; color: var(--july-flame);
+  margin-bottom: 16px;
+  text-shadow: var(--glow-red);
+  opacity: 0; animation: fadeInUp 0.8s ease forwards 0.3s;
+}
+.hero-title {
+  font-family: var(--font-display); font-weight: 900;
+  font-size: clamp(2.4rem, 7vw, 5.5rem);
+  letter-spacing: 3px; color: #fff;
+  text-transform: uppercase;
+  line-height: 0.9;
+  opacity: 0; animation: fadeInUp 0.8s ease forwards 0.5s;
+}
+.hero-title .accent {
+  color: var(--july-flame);
+  text-shadow: var(--glow-red);
+}
+.hero-sub {
+  font-size: clamp(0.9rem, 2vw, 1.15rem);
+  color: var(--text-muted); letter-spacing: 6px;
+  margin-top: 12px;
+  opacity: 0; animation: fadeInUp 0.8s ease forwards 0.7s;
+}
+.hero-jp {
+  font-family: 'Noto Sans JP', sans-serif; font-weight: 700;
+  font-size: 0.85rem; color: var(--july-flame);
+  letter-spacing: 8px; margin-top: 10px;
+  text-shadow: var(--glow-red);
+  opacity: 0; animation: fadeInUp 0.8s ease forwards 0.9s;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-footer-controls {
+  position: relative; z-index: 40;
+  padding: 0 var(--side-padding) 10vh;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 20px;
+}
+.kv-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 140px; padding: 12px 28px;
+  font-family: var(--font-display); font-size: 0.75rem; font-weight: 600;
+  text-decoration: none; text-transform: uppercase;
+  letter-spacing: 2px; white-space: nowrap;
+  transition: all 0.35s cubic-bezier(0.2,1,0.3,1);
+  border-radius: 2px; cursor: pointer;
+}
+.btn.primary {
+  background: var(--july-flame); color: #000;
+  border: none;
+  box-shadow: 0 0 20px rgba(230,0,54,0.3);
+}
+.btn.ghost {
+  border: 1px solid var(--july-flame);
+  color: var(--july-flame);
+  background: rgba(230,0,54,0.04);
+}
+.btn:hover {
+  transform: translateY(-3px);
+  filter: brightness(1.2);
+  box-shadow: 0 6px 28px rgba(230,0,54,0.5);
+}
+
+.scroll-indicator {
+  text-align: center; cursor: pointer;
+  transition: opacity 0.6s ease;
+}
+.scroll-indicator span {
+  display: block; width: 14px; height: 14px;
+  border-right: 2px solid var(--july-flame);
+  border-bottom: 2px solid var(--july-flame);
+  transform: rotate(45deg); margin: 0 auto;
+  filter: drop-shadow(0 0 6px rgba(230,0,54,0.7));
+  animation: arrowBounce 2s infinite;
+}
+@keyframes arrowBounce {
+  0% { transform: rotate(45deg) translate(-4px,-4px); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: rotate(45deg) translate(8px,8px); opacity: 0; }
+}
+
+/* ===============================
+   MISSION TICKER
+   =============================== */
+.mission-ticker-container {
+  position: relative; z-index: 50;
+  width: 100%; padding: 24px 0;
+  background: rgba(0,0,0,0.35);
+  border-top: 1px solid rgba(230,0,54,0.1);
+  border-bottom: 1px solid rgba(230,0,54,0.1);
+  overflow: hidden;
+}
+.ticker-ctrl {
+  position: absolute; top: 0; height: 100%; width: 45px; z-index: 30;
+  background: none; border: none; outline: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.2); font-size: 28px;
+  transition: all 0.3s ease;
+}
+.ticker-ctrl.prev { left: 0; background: linear-gradient(to right, rgba(0,0,0,0.5), transparent); }
+.ticker-ctrl.next { right: 0; background: linear-gradient(to left, rgba(0,0,0,0.5), transparent); }
+.ticker-ctrl:hover { color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.8); }
+.mission-ticker {
+  margin: 0 45px; overflow: hidden; display: flex; justify-content: center;
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+.ticker-wrapper { display: flex; will-change: transform; }
+.ticker-group { display: flex; gap: 0; }
+.ticker-card {
+  display: flex; flex-shrink: 0;
+  width: calc((100vw - 90px) / 5); height: 72px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border-subtle);
+  text-decoration: none; color: var(--text-main);
+  transition: all 0.35s ease;
+}
+.ticker-card .ticker-thumb {
+  width: 56px; height: 100%; flex-shrink: 0;
+  background-size: cover; background-position: center;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  filter: grayscale(0.6) brightness(0.5);
+  transition: all 0.4s ease;
+}
+.ticker-card .ticker-info {
+  flex: 1; padding: 0 14px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.ticker-card .ticker-tag {
+  font-family: var(--font-mono); font-size: 0.6rem;
+  color: var(--july-flame); letter-spacing: 1px;
+  margin-bottom: 2px;
+}
+.ticker-card .ticker-name {
+  font-family: var(--font-body); font-size: 0.78rem; font-weight: 700;
+  color: rgba(255,255,255,0.65); letter-spacing: 2px;
+  transition: color 0.3s ease;
+}
+.ticker-card:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.35);
+  box-shadow: inset 0 0 12px rgba(255,255,255,0.03);
+}
+.ticker-card:hover .ticker-thumb { filter: grayscale(0) brightness(1); }
+.ticker-card:hover .ticker-name { color: #fff; }
+@media (max-width: 768px) { .ticker-card { width: calc(100vw - 90px); } }
+
+/* ===============================
+   MAIN CONTENT
+   =============================== */
+.page-content { flex: 1; position: relative; z-index: 50; }
+
+/* ===============================
+   SECTION STYLES
+   =============================== */
+.section {
+  position: relative;
+  padding: 90px var(--side-padding);
+  background: transparent;
+}
+.section-header { margin-bottom: 50px; }
+.section-tag {
+  font-family: var(--font-mono); font-size: 0.68rem;
+  letter-spacing: 3px; color: var(--july-flame);
+  margin-bottom: 8px;
+}
+.section-title {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  letter-spacing: 2px; color: #fff;
+  text-transform: uppercase; display: inline-block;
+}
+.section-title::after { content: '_'; color: var(--july-flame); animation: blink 1s step-end infinite; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+.section-desc {
+  font-size: 0.85rem; color: var(--text-muted);
+  letter-spacing: 2px; margin-top: 8px;
+  max-width: 600px; line-height: 1.7;
+}
+.section-line {
+  width: 100%; height: 1px;
+  background: linear-gradient(90deg, rgba(230,0,54,0.3), transparent);
+  margin: 16px 0 0;
+}
+.terminal-divider {
+  display: flex; align-items: center; gap: 12px;
+  padding: 0 var(--side-padding); margin: 10px 0;
+  font-family: var(--font-mono); font-size: 0.62rem;
+  color: var(--text-dim); letter-spacing: 2px;
+}
+.terminal-divider::before,
+.terminal-divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(230,0,54,0.2), transparent);
+}
+
+/* ===============================
+   TECH CARD GRID
+   =============================== */
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+.tech-card {
+  display: flex; flex-direction: column;
+  background: rgba(255,255,255,0.015);
+  border: 1px solid var(--border-subtle);
+  text-decoration: none; color: var(--text-main);
+  transition: all 0.4s cubic-bezier(0.2,1,0.3,1);
+  position: relative; overflow: hidden;
+  cursor: pointer;
+}
+.tech-card::before {
+  content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--july-flame), transparent);
+  transform: scaleX(0); transform-origin: center;
+  transition: transform 0.5s ease; z-index: 2;
+}
+.tech-card:hover::before { transform: scaleX(1); }
+.tech-card:hover {
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 30px rgba(230,0,54,0.08);
+}
+
+/* 封面图区域 */
+.card-thumb {
+  width: 100%; height: 180px;
+  background-size: cover; background-position: center;
+  position: relative;
+  border-bottom: 1px solid rgba(230,0,54,0.12);
+  transition: all 0.4s ease;
+}
+.tech-card:hover .card-thumb {
+  border-bottom-color: rgba(230,0,54,0.4);
+}
+/* 封面上的暗角遮罩 */
+.card-thumb::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(7,5,9,0.7) 0%, transparent 40%);
+  pointer-events: none;
+}
+/* 封面上的编号 */
+.card-thumb .corner-mark {
+  position: absolute; top: 10px; right: 12px; z-index: 3;
+  font-family: var(--font-mono); font-size: 0.55rem;
+  color: rgba(255,255,255,0.5); letter-spacing: 1px;
+  background: rgba(0,0,0,0.5); padding: 3px 8px;
+  border-radius: 1px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+/* 封面上的时间戳标记 */
+.card-thumb .timestamp-badge {
+  position: absolute; bottom: 10px; left: 12px; z-index: 3;
+  font-family: var(--font-mono); font-size: 0.6rem;
+  color: rgba(255,255,255,0.7); letter-spacing: 1px;
+  background: rgba(230,0,54,0.6); padding: 2px 8px;
+  border-radius: 1px;
+  display: none;
+}
+.card-thumb .timestamp-badge.show { display: block; }
+
+/* 卡片内容区 */
+.card-body { padding: 20px 18px 18px; flex: 1; display: flex; flex-direction: column; }
+.card-name {
+  font-size: 1.25rem; font-weight: 700;
+  letter-spacing: 3px; color: #fff;
+  margin-bottom: 2px;
+}
+.card-name-en {
+  font-family: var(--font-display); font-size: 0.68rem;
+  color: var(--text-dim); letter-spacing: 1px;
+  margin-bottom: 10px; text-transform: uppercase;
+}
+.card-name-jp {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.7rem; color: var(--text-dim);
+  letter-spacing: 1px; margin-bottom: 10px;
+}
+.card-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.card-tags .tag {
+  font-family: var(--font-mono); font-size: 0.6rem;
+  letter-spacing: 1px;
+  padding: 3px 8px; border-radius: 1px;
+  border: 1px solid rgba(230,0,54,0.25);
+  color: var(--flame-bright);
+  background: rgba(230,0,54,0.05);
+}
+.card-tags .tag.easy   { border-color: rgba(100,200,100,0.3); color: #6c6; background: rgba(100,200,100,0.04); }
+.card-tags .tag.medium { border-color: rgba(255,180,60,0.3); color: #fc6; background: rgba(255,180,60,0.04); }
+.card-tags .tag.hard   { border-color: rgba(255,100,60,0.3); color: #f84; background: rgba(255,100,60,0.04); }
+.card-tip {
+  font-size: 0.75rem; color: var(--text-muted);
+  line-height: 1.6; flex: 1;
+}
+.card-footer {
+  display: flex; align-items: center; gap: 6px;
+  margin-top: 12px; padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+.bilibili-mark {
+  font-family: var(--font-mono); font-size: 0.6rem;
+  color: #fb7299; letter-spacing: 1px;
+}
+
+/* ===============================
+   LEARNING PATH
+   =============================== */
+.path-section { padding: 70px var(--side-padding) 100px; }
+.path-flow {
+  display: flex; align-items: center; justify-content: center;
+  flex-wrap: wrap; gap: 24px; margin-top: 40px;
+}
+.path-node {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; gap: 10px;
+  padding: 28px 24px;
+  background: rgba(255,255,255,0.015);
+  border: 1px solid var(--border-subtle);
+  min-width: 160px;
+  transition: all 0.35s ease;
+}
+.path-node:hover { border-color: rgba(230,0,54,0.3); box-shadow: 0 0 24px rgba(230,0,54,0.1); }
+.path-node .step-num {
+  font-family: var(--font-display); font-size: 1.6rem;
+  font-weight: 900; color: var(--july-flame);
+  text-shadow: var(--glow-red);
+}
+.path-node .step-title {
+  font-family: var(--font-display); font-size: 0.75rem;
+  letter-spacing: 2px; color: #fff;
+}
+.path-node .step-desc {
+  font-size: 0.7rem; color: var(--text-muted);
+  line-height: 1.5; max-width: 160px;
+}
+.path-arrow {
+  font-family: var(--font-mono); font-size: 1.2rem;
+  color: var(--july-flame);
+  text-shadow: var(--glow-red);
+  animation: arrowPulse 1.5s ease-in-out infinite;
+}
+@keyframes arrowPulse {
+  0%, 100% { opacity: 0.3; transform: translateX(0); }
+  50% { opacity: 1; transform: translateX(6px); }
+}
+
+/* ===============================
+   FOOTER
+   =============================== */
+.main-footer {
+  position: relative; z-index: 100;
+  background: #000;
+  padding: 50px var(--side-padding) 40px;
+  border-top: 1px solid var(--july-flame);
+  text-align: center; margin-top: auto;
+}
+.footer-tagline {
+  font-family: var(--font-display); font-size: 0.7rem;
+  letter-spacing: 4px; color: rgba(255,255,255,0.4);
+}
+.footer-tagline span { color: var(--july-flame); text-shadow: var(--glow-red); }
+.footer-copy {
+  font-family: var(--font-mono); font-size: 0.6rem;
+  color: rgba(255,255,255,0.2); letter-spacing: 2px;
+  margin-top: 8px;
+}
+
+/* ===============================
+   SCROLL REVEAL
+   =============================== */
+.reveal {
+  opacity: 0; transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ===============================
+   RESPONSIVE
+   =============================== */
+@media (max-width: 768px) {
+  .hero-title { font-size: 1.8rem; }
+  .hero-footer-controls { flex-direction: column; align-items: flex-start; }
+  .tech-grid { grid-template-columns: 1fr; }
+  .card-thumb { height: 150px; }
+  .path-flow { flex-direction: column; }
+  .path-arrow { transform: rotate(90deg); }
+  .section { padding: 60px 16px; }
+  .path-section { padding: 40px 16px 60px; }
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--july-flame), #4a0020); border-radius: 3px; }
+
+/* 火花动画 */
+@keyframes sparkOut {
+  0%   { transform: translate(0,0) scale(1); opacity:1; }
+  100% { transform: translate(var(--sx),var(--sy)) scale(0); opacity:0; }
+}
+</style>
+</head>
+<body>
+
+<div class="ParticleField"><canvas id="field-canvas"></canvas></div>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <span class="logo-text">TECH_<span>LIBRARY</span></span>
+    </a>
+    <nav class="main-nav">
+      <a href="#basic">基础技</a>
+      <a href="#advanced">进阶技</a>
+      <a href="#sabi">副歌技</a>
+      <a href="#path">学习路径</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-hud"></div>
+  <div class="hero-scanline"></div>
+  <div class="hero-diamond"></div>
+  <div class="hero-main-display">
+    <div class="hero-tag">// SYSTEM_INIT :: TECH_LIBRARY_v2.0</div>
+    <h1 class="hero-title">WOTA<span class="accent">GEI</span><br>ARCHIVE</h1>
+    <p class="hero-sub">——  新 手 入 门 导 航  ——</p>
+    <p class="hero-jp">全テノ打チ師ニ捧グ</p>
+  </div>
+  <div class="hero-footer-controls">
+    <div class="kv-actions">
+      <a href="#basic" class="btn primary">ENTER_</a>
+      <a href="#path" class="btn ghost">LEARNING_PATH</a>
+    </div>
+    <a class="scroll-indicator" id="scrollIndicator" href="#ticker"><span></span></a>
+  </div>
+</section>
+
+<!-- MISSION TICKER -->
+<div class="mission-ticker-container" id="ticker">
+  <button class="ticker-ctrl prev" onclick="moveTicker(-1)">‹</button>
+  <button class="ticker-ctrl next" onclick="moveTicker(1)">›</button>
+  <div class="mission-ticker" id="tickerRoot">
+    <div class="ticker-wrapper" id="tickerWrapper">
+      <div class="ticker-group" id="tickerGroup"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="page-content">
+
+  <!-- BASIC TECH -->
+  <section class="section" id="basic">
+    <div class="section-header reveal">
+      <div class="section-tag">PHASE 01 // FOUNDATION</div>
+      <h2 class="section-title">BASIC_TECH</h2>
+      <p class="section-desc">入门四天王 — 掌握这四招，你就拥有了 WOTA艺 的"普通话"。所有技连的起点。</p>
+      <div class="section-line"></div>
+    </div>
+    <div class="tech-grid" id="basicGrid"></div>
+  </section>
+
+  <div class="terminal-divider"><span>├── PHASE_01_COMPLETE ──┤</span></div>
+
+  <!-- ADVANCED TECH -->
+  <section class="section" id="advanced" style="padding-top:50px;">
+    <div class="section-header reveal">
+      <div class="section-tag">PHASE 02 // EVOLUTION</div>
+      <h2 class="section-title">ADVANCED_TECH</h2>
+      <p class="section-desc">双人配合与系统学习 — 走出舒适区，让你的 WOTA艺 开始有"自己的味道"。</p>
+      <div class="section-line"></div>
+    </div>
+    <div class="tech-grid" id="advancedGrid"></div>
+  </section>
+
+  <div class="terminal-divider"><span>├── PHASE_02_COMPLETE ──┤</span></div>
+
+  <!-- SABI TECH -->
+  <section class="section" id="sabi" style="padding-top:50px;">
+    <div class="section-header reveal">
+      <div class="section-tag">PHASE 03 // CLIMAX</div>
+      <h2 class="section-title">SABI_TECH</h2>
+      <p class="section-desc">副歌技 / サビ技 — 音乐高潮处的绽放。每一招都是打师的个性签名。</p>
+      <div class="section-line"></div>
+    </div>
+    <div class="tech-grid" id="sabiGrid"></div>
+  </section>
+
+  <!-- LEARNING PATH -->
+  <section class="path-section" id="path">
+    <div class="section-header reveal" style="text-align:center;">
+      <div class="section-tag">BOOTCAMP // SEQUENCE</div>
+      <h2 class="section-title">LEARNING_PATH</h2>
+      <p class="section-desc" style="margin:8px auto 0;">从零到技连 — 推荐学习路线</p>
+      <div class="section-line"></div>
+    </div>
+    <div class="path-flow reveal">
+      <div class="path-node">
+        <div class="step-num">01</div>
+        <div class="step-title">BASIC_FOUR</div>
+        <p class="step-desc">雷蛇→天照改→村正→伊邪那岐<br>按顺序逐一攻破打底</p>
+      </div>
+      <div class="path-arrow">→</div>
+      <div class="path-node">
+        <div class="step-num">02</div>
+        <div class="step-title">WATCH_GUIDE</div>
+        <p class="step-desc">风雅解说视频全面理解<br>发力与轨迹，养成正确习惯</p>
+      </div>
+      <div class="path-arrow">→</div>
+      <div class="path-node">
+        <div class="step-num">03</div>
+        <div class="step-title">TRY_SABI</div>
+        <p class="step-desc">杰克小刀→性感蝴蝶→神威<br>逐步提升，找到自己风格</p>
+      </div>
+      <div class="path-arrow">→</div>
+      <div class="path-node">
+        <div class="step-num">04</div>
+        <div class="step-title">FREESTYLE</div>
+        <p class="step-desc">将多个技串联起来<br>跟随音乐节奏自由发挥</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="main-footer">
+  <p class="footer-tagline"><span>◆</span> 打ち師よ、光となれ <span>◆</span></p>
+  <p class="footer-copy">© 2024 TECH_LIBRARY // 视频来源 BILIBILI ｜ 仅供学习交流 ｜ ヲタ芸 技連道場</p>
+</footer>
+
+<script>
+// =============================================
+// DATA — 技术数据库
+// =============================================
+const techniques = [
+  // ===== 基础技 =====
+  {
+    id: 'TECH.01', category: 'basic',
+    name: '雷 蛇', nameEn: 'THUNDER_SNAKE', nameJp: 'サンダースネーク',
+    bvid: 'BV1Nx41127jR',
+    cover: 'http://i1.hdslb.com/bfs/archive/cf4b360d3ee5f6e2c7c817c609d90d6d84270170.jpg',
+    url: 'https://www.bilibili.com/video/BV1Nx41127jR',
+    difficulty: 'easy', difficultyLabel: '入门必学',
+    tags: ['基本技'],
+    tip: '最经典的 WOTA艺起手技，快速交叉挥棒形成闪电轨迹。几乎所有技连都从这里开始。'
+  },
+  {
+    id: 'TECH.02', category: 'basic',
+    name: '天 照 改', nameEn: 'AMATERASU_KAI', nameJp: 'アマテラス改',
+    bvid: 'BV1Nx41127jR',
+    cover: 'http://i1.hdslb.com/bfs/archive/cf4b360d3ee5f6e2c7c817c609d90d6d84270170.jpg',
+    url: 'https://www.bilibili.com/video/BV1Nx41127jR',
+    difficulty: 'easy', difficultyLabel: '入门必学',
+    tags: ['基本技'],
+    tip: '双手画圆的经典动作，如同太阳光辉扩散。练好圆弧轨迹与身体协调的关键一课。'
+  },
+  {
+    id: 'TECH.03', category: 'basic',
+    name: '村 正', nameEn: 'MURAMASA', nameJp: 'ムラマサ',
+    bvid: 'BV1Nx41127jR',
+    cover: 'http://i1.hdslb.com/bfs/archive/cf4b360d3ee5f6e2c7c817c609d90d6d84270170.jpg',
+    url: 'https://www.bilibili.com/video/BV1Nx41127jR',
+    difficulty: 'easy', difficultyLabel: '入门必学',
+    tags: ['基本技'],
+    tip: '如拔刀斩般的斜向切击，干脆利落。掌握瞬间爆发力与节奏切分感的核心技。'
+  },
+  {
+    id: 'TECH.04', category: 'basic',
+    name: '伊邪那岐', nameEn: 'IZANAGI', nameJp: 'イザナギ',
+    bvid: 'BV1Nx41127jR',
+    cover: 'http://i1.hdslb.com/bfs/archive/cf4b360d3ee5f6e2c7c817c609d90d6d84270170.jpg',
+    url: 'https://www.bilibili.com/video/BV1Nx41127jR',
+    difficulty: 'easy', difficultyLabel: '入门必学',
+    tags: ['基本技'],
+    tip: '旋转与对称的美学，双手协调的经典。打好这个基础，后续旋转系技法水到渠成。'
+  },
+
+  // ===== 进阶技 =====
+  {
+    id: 'TECH.05', category: 'advanced',
+    name: '金 刚 · 真 龙', nameEn: 'KONGO_SHINRYU', nameJp: 'コンゴウ & シンリュウ',
+    bvid: 'BV1eF411M7Ug',
+    cover: 'http://i1.hdslb.com/bfs/archive/2dcf7d26425901d7eeb737e5fe7f72f8d3f949b9.jpg',
+    url: 'https://www.bilibili.com/video/BV1eF411M7Ug',
+    difficulty: 'medium', difficultyLabel: '技双',
+    tags: ['双人技', '技双'],
+    tip: '两人同步的华丽组合技，考验默契与节奏感。真龙作为衔接让整体行云流水。'
+  },
+  {
+    id: 'TECH.06', category: 'advanced',
+    name: '风 雅 解 说', nameEn: 'FUGA_KAISETSU', nameJp: '風雅 解説動画 · 航平',
+    bvid: 'BV1u54y1C7s2',
+    cover: 'http://i1.hdslb.com/bfs/archive/7763d5c0fd50b94c3b6d413a25aa2d5c7ff819e5.jpg',
+    url: 'https://www.bilibili.com/video/BV1u54y1C7s2',
+    difficulty: 'medium', difficultyLabel: '解说教学',
+    tags: ['教学向'],
+    tip: '航平出品的完整解说视频，从手型到发力到轨迹逐帧拆解。建议反复观看体会。'
+  },
+
+  // ===== 副歌技 =====
+  {
+    id: 'SABI.01', category: 'sabi',
+    name: '杰克小刀', nameEn: 'JACK_KNIFE', nameJp: 'ジャックナイフ',
+    bvid: 'BV13jDqYsEy8',
+    cover: 'http://i2.hdslb.com/bfs/archive/79cf8520c59b234f51b956deb44d2404053aeb17.jpg',
+    url: 'https://www.bilibili.com/video/BV13jDqYsEy8?t=6',
+    timestamp: '00:06',
+    difficulty: 'medium', difficultyLabel: 'サビ技',
+    tags: ['东郊技艺'],
+    tip: '干净利落的切击技，节奏紧凑。东郊技艺系列首推，精准空降 00:06 起手教学。'
+  },
+  {
+    id: 'SABI.02', category: 'sabi',
+    name: '须佐之男', nameEn: 'SUSANOO', nameJp: 'スサノオ',
+    bvid: 'BV1cMmwYAE8P',
+    cover: 'http://i1.hdslb.com/bfs/archive/a30aeb159c18b584d103c6a566f1d682f8febe84.jpg',
+    url: 'https://www.bilibili.com/video/BV1cMmwYAE8P?t=106',
+    timestamp: '01:46',
+    difficulty: 'hard', difficultyLabel: 'サビ技',
+    tags: ['白狐'],
+    tip: '如暴风骤雨般的连续技，动作幅度大、节奏迅猛。精准空降 01:46 直接观摩。'
+  },
+  {
+    id: 'SABI.03', category: 'sabi',
+    name: '神 威', nameEn: 'KAMUI', nameJp: 'カムイ · 限定新版',
+    bvid: 'BV1cMmwYAE8P',
+    cover: 'http://i1.hdslb.com/bfs/archive/a30aeb159c18b584d103c6a566f1d682f8febe84.jpg',
+    url: 'https://www.bilibili.com/video/BV1cMmwYAE8P?t=42',
+    timestamp: '00:42',
+    difficulty: 'medium', difficultyLabel: 'サビ技',
+    tags: ['白狐', '新版'],
+    tip: '神威限定新版打法，动作更加洗练流畅。精准空降 00:42 看完整演示。'
+  },
+  {
+    id: 'SABI.04', category: 'sabi',
+    name: '炒 面 蛇', nameEn: 'CHOW_MEIN_SNAKE', nameJp: 'チャオメンスネーク',
+    bvid: 'BV11y411q7Cm',
+    cover: 'http://i1.hdslb.com/bfs/archive/77df28e26ffa0887c0b998dbcf75fd1e09866d0a.jpg',
+    url: 'https://www.bilibili.com/video/BV11y411q7Cm',
+    difficulty: 'medium', difficultyLabel: 'サビ技',
+    tags: ['Liyuu Concert'],
+    tip: '出自 Liyuu Concert TOUR2024 纪念视频，蛇形轨迹变体打法，观赏性十足。'
+  },
+  {
+    id: 'SABI.05', category: 'sabi',
+    name: '阿里十字', nameEn: 'ALI_CROSS', nameJp: 'アリクロス',
+    bvid: '',
+    cover: '',
+    url: 'https://b23.tv/qhDYtgC',
+    timestamp: '01:03',
+    difficulty: 'medium', difficultyLabel: 'サビ技',
+    tags: ['十字系'],
+    tip: '十字交叉轨迹的经典打法，视频标记点 01:03 精准定位。双手交叉协调的必修课。'
+  },
+  {
+    id: 'SABI.06', category: 'sabi',
+    name: '水仙夫人', nameEn: 'MRS_NARCISSA', nameJp: 'ミセスナルシッサ',
+    bvid: 'BV1bV411d75E',
+    cover: 'http://i0.hdslb.com/bfs/archive/8044492ac8f300e3225c78360696391b61dbaa80.jpg',
+    url: 'https://www.bilibili.com/video/BV1bV411d75E',
+    difficulty: 'medium', difficultyLabel: 'サビ技',
+    tags: ['GinyuforcE', '讲座'],
+    tip: 'GinyuforcE 出品完整ヲタ芸讲座。优雅如花又充满力量，附带详细慢动作拆解。'
+  },
+  {
+    id: 'SABI.07', category: 'sabi',
+    name: '猎 手', nameEn: 'HUNTER', nameJp: 'ハンター',
+    bvid: 'BV1F84y1r7xS',
+    cover: 'http://i1.hdslb.com/bfs/archive/0ecf97a238a1308152726d416a45676d24d8576c.jpg',
+    url: 'https://www.bilibili.com/video/BV1F84y1r7xS?t=358',
+    timestamp: '05:58',
+    difficulty: 'hard', difficultyLabel: 'サビ技',
+    tags: ['Fly-N 6周年'],
+    tip: 'Fly-N 6周年 SAOメドレー技连中的高光技。精准空降 05:58，高速连打代表。'
+  },
+  {
+    id: 'SABI.08', category: 'sabi',
+    name: '性感蝴蝶', nameEn: 'SEXY_CHONBO', nameJp: 'セクシーちょんぼ',
+    bvid: 'BV1v7421o76d',
+    cover: 'http://i2.hdslb.com/bfs/archive/7c64caa3980de55a7b645fef90b322a1b38e6ee1.jpg',
+    url: 'https://www.bilibili.com/video/BV1v7421o76d',
+    difficulty: 'medium', difficultyLabel: 'サビ技',
+    tags: ['白狐Hako', '4分钟学会'],
+    tip: '"四分钟学会"系列入门佳作，白狐Hako 出品。蝴蝶扇翅般的灵动轨迹，新手友好。'
+  }
+];
+
+// 阿里十字默认封面（尝试通过短链解析）
+const ALI_CROSS_FALLBACK = 'http://i1.hdslb.com/bfs/archive/a30aeb159c18b584d103c6a566f1d682f8febe84.jpg';
+
+// =============================================
+// RENDER CARDS
+// =============================================
+function buildCard(t) {
+  const diffClass = t.difficulty === 'easy' ? 'easy' : t.difficulty === 'hard' ? 'hard' : 'medium';
+  const tagsHtml = t.tags.map(tag => {
+    if (tag === '新版') return `<span class="tag">${tag}</span>`;
+    return `<span class="tag">${tag}</span>`;
+  }).join('');
+
+  const tsBadge = t.timestamp
+    ? `<span class="timestamp-badge show">▶ ${t.timestamp}</span>`
+    : '';
+
+  const coverUrl = t.cover || ALI_CROSS_FALLBACK;
+
+  return `
+    <a class="tech-card reveal" href="${t.url}" target="_blank" rel="noopener" data-id="${t.id}">
+      <div class="card-thumb" style="background-image:url('${coverUrl}')">
+        <span class="corner-mark">${t.id}</span>
+        ${tsBadge}
+      </div>
+      <div class="card-body">
+        <div class="card-name">${t.name}</div>
+        <div class="card-name-en">${t.nameEn}</div>
+        <div class="card-name-jp">${t.nameJp}</div>
+        <div class="card-tags">
+          <span class="tag ${diffClass}">${t.difficultyLabel}</span>
+          ${tagsHtml}
+        </div>
+        <p class="card-tip">${t.tip}</p>
+        <div class="card-footer">
+          <span class="bilibili-mark">▶ BILIBILI</span>
+        </div>
+      </div>
+    </a>`;
+}
+
+// 按分类渲染
+document.getElementById('basicGrid').innerHTML = techniques
+  .filter(t => t.category === 'basic').map(buildCard).join('');
+document.getElementById('advancedGrid').innerHTML = techniques
+  .filter(t => t.category === 'advanced').map(buildCard).join('');
+document.getElementById('sabiGrid').innerHTML = techniques
+  .filter(t => t.category === 'sabi').map(buildCard).join('');
+
+// =============================================
+// MISSION TICKER
+// =============================================
+(function() {
+  const tickerGroup = document.getElementById('tickerGroup');
+  const allForTicker = [...techniques, ...techniques]; // 两遍无缝循环
+  allForTicker.forEach(t => {
+    const coverUrl = t.cover || ALI_CROSS_FALLBACK;
+    const a = document.createElement('a');
+    a.className = 'ticker-card';
+    a.href = t.url;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.innerHTML = `
+      <div class="ticker-thumb" style="background-image:url('${coverUrl}')"></div>
+      <div class="ticker-info">
+        <span class="ticker-tag">${t.id}</span>
+        <span class="ticker-name">${t.name}</span>
+      </div>`;
+    tickerGroup.appendChild(a);
+  });
+
+  const wrapper = document.getElementById('tickerWrapper');
+  const ticker = document.getElementById('tickerRoot');
+  let offset = 0, scrollSpeed = 0.4, paused = false;
+
+  ticker.addEventListener('mouseenter', () => { paused = true; });
+  ticker.addEventListener('mouseleave', () => { paused = false; });
+
+  function autoScroll() {
+    if (!paused) {
+      const singleSetWidth = wrapper.scrollWidth / 2;
+      offset += scrollSpeed;
+      if (offset >= singleSetWidth) offset -= singleSetWidth;
+      wrapper.style.transform = `translateX(${-offset}px)`;
+    }
+    requestAnimationFrame(autoScroll);
+  }
+  autoScroll();
+
+  window.moveTicker = function(dir) {
+    const singleSetWidth = wrapper.scrollWidth / 2;
+    offset += dir * 280;
+    if (offset < 0) offset += singleSetWidth;
+    if (offset >= singleSetWidth) offset -= singleSetWidth;
+    wrapper.style.transition = 'transform 0.5s cubic-bezier(0.2,1,0.3,1)';
+    wrapper.style.transform = `translateX(${-offset}px)`;
+    setTimeout(() => { wrapper.style.transition = 'none'; }, 500);
+  };
+})();
+
+// =============================================
+// 尝试解析阿里十字的短链接
+// =============================================
+(function() {
+  // 尝试通过 b23.tv 获取封面
+  fetch('https://api.bilibili.com/x/web-interface/card?mid=0&photo=false', { mode: 'no-cors' })
+    .catch(() => {});
+
+  // 尝试直接访问短链看是否能被重定向
+  const aliCard = document.querySelector('[data-id="SABI.05"]');
+  if (aliCard) {
+    // 先用视频合集封面占位，短链解析由后端完成
+    // 如果页面部署到服务器，可以使用服务端代理解析
+    const thumbEl = aliCard.querySelector('.card-thumb');
+    if (thumbEl && !thumbEl.style.backgroundImage.includes('http')) {
+      thumbEl.style.backgroundImage = `url('${ALI_CROSS_FALLBACK}')`;
+    }
+  }
+})();
+
+// =============================================
+// PARTICLE FIELD
+// =============================================
+(function() {
+  const canvas = document.getElementById('field-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  const colorBases = ['rgba(230,0,54,', 'rgba(255,106,61,', 'rgba(227,90,58,', 'rgba(255,140,90,'];
+
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  window.addEventListener('resize', resize); resize();
+
+  class Particle {
+    constructor() {
+      this.reset();
+      this.y = Math.random() * canvas.height;
+    }
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = canvas.height + 10;
+      this.size = Math.random() * 2 + 0.6;
+      this.speed = Math.random() * 0.5 + 0.15;
+      this.colorBase = colorBases[Math.floor(Math.random() * colorBases.length)];
+      this.opacity = Math.random() * 0.4 + 0.1;
+      this.wobble = Math.random() * Math.PI * 2;
+      this.wobbleSpeed = (Math.random() - 0.5) * 0.02;
+    }
+    update() {
+      this.y -= this.speed;
+      this.wobble += this.wobbleSpeed;
+      this.x += Math.sin(this.wobble) * 0.3;
+      if (this.y < -20) { this.reset(); this.y = canvas.height + 10; }
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = this.colorBase + this.opacity + ')';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size * 3.5, 0, Math.PI * 2);
+      ctx.fillStyle = this.colorBase + (this.opacity * 0.08) + ')';
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < 70; i++) particles.push(new Particle());
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => { p.update(); p.draw(); });
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 130) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = 'rgba(230,0,54,' + (0.025 * (1 - dist / 130)) + ')';
+          ctx.lineWidth = 0.5; ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+
+// =============================================
+// SCROLL REVEAL
+// =============================================
+(function() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+  // 延迟观察动态渲染的卡片
+  setTimeout(() => {
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  }, 100);
+
+  const scrollInd = document.getElementById('scrollIndicator');
+  if (scrollInd) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 200) {
+        scrollInd.style.opacity = '0'; scrollInd.style.pointerEvents = 'none';
+      } else {
+        scrollInd.style.opacity = '1'; scrollInd.style.pointerEvents = 'auto';
+      }
+    });
+  }
+})();
+
+// =============================================
+// 卡片点击火花
+// =============================================
+document.addEventListener('click', function(e) {
+  const card = e.target.closest('.tech-card');
+  if (!card) return;
+  const rect = card.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  for (let i = 0; i < 8; i++) {
+    const spark = document.createElement('div');
+    spark.style.cssText = `
+      position:absolute; left:${x}px; top:${y}px;
+      width:2px; height:2px; background:#E60036;
+      border-radius:50%; pointer-events:none; z-index:999;
+      animation: sparkOut ${0.6+Math.random()*0.6}s ease-out forwards;
+      --sx:${Math.cos(Math.PI*2*i/8)*(25+Math.random()*35)}px;
+      --sy:${Math.sin(Math.PI*2*i/8)*(25+Math.random()*35)}px;
+    `;
+    card.appendChild(spark);
+    setTimeout(() => spark.remove(), 1200);
+  }
+});
+</script>
+</body>
+</html>
